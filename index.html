@@ -37,5 +37,39 @@
         </ul>
             
         <p><i>Using variable test set size</i>: If finetuning uses X% of the data, (100-X)% is used for testing</p>
+
+        <table></table>
     </body>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+    <script>
+        function arrayToTable(tableData) {
+            var table = $('<table></table>');
+
+            var header_row = $('<tr></tr>');
+            header_row.append($('<th>Cooling tower</th>'));
+            header_row.append($('<th>Datapoints</th>'));
+            table.append(header_row);
+
+            for (var i = 1; i < tableData.length-1; i++) {
+                rowData = tableData[i]
+                var row = $('<tr></tr>');
+                for (var j = 0; j < 2; j++) {
+                    cellData = rowData[j]
+                    row.append($('<td>'+cellData+'</td>'));
+                }
+                table.append(row);
+            }
+            return table;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "graphs/data_amounts.csv",
+            success: function (data) {
+                $('table').append(arrayToTable(Papa.parse(data).data));
+            }
+        });
+    </script>
 </html>
